@@ -1,0 +1,5 @@
+name = Matthew
+description = Matthew module
+dependencies[] = services
+dependencies[] = services_entity
+core = 7.x

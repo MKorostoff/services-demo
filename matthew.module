@@ -1,0 +1,51 @@
+<?php
+
+/**
+ * Implements hook_services_request_postprocess_alter
+ */
+function matthew_services_request_postprocess_alter($controller, $args, &$result) {
+  if ($controller['callback'] === '_system_resource_connect') {
+    $result->user->picture = (!empty($result->user->picture)) ? $result->user->picture : 'http://srv.local/sites/default/files/220px-Nyan_cat_250px_frame.PNG' ;
+  }
+}
+
+/**
+ * Implements hook_services_resources
+ */
+function matthew_services_resources() {
+  return array(
+    'hello_world' => array(
+        'index' => array(
+          'help' => 'Says "hello world"',
+          'file' => array('type' => 'inc', 'module' => 'matthew', 'name' => 'resources/hello_world.resource'),
+          'callback' => '_matthew_hello_world',
+          'access callback' => '_matthew_services_access',
+          'args' => array(
+            array(
+              'name' => 'name',
+              'type' => 'string',
+              'description' => 'The person to greet',
+              'source' => array('path' => '0'),
+              'optional' => TRUE,
+            ),
+          ),
+        ),
+      ),
+
+    'dashboard' => array(
+      'index' => array(
+        'help' => 'Shows the dashboard',
+        'file' => array('type' => 'inc', 'module' => 'matthew', 'name' => 'resources/matthew.resource'),
+        'callback' => '_matthew_dashboard',
+        'access callback' => '_matthew_services_access',
+      ),
+    ),
+  );
+}
+
+
+
+function _matthew_services_access() {
+  return TRUE;
+  // return user_is_logged_in();
+}
